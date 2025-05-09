@@ -79,5 +79,10 @@ public abstract class Expr {
         public int value() {
             return this.value;
         }
+
+        @Override
+        public String toString() {
+            return "" + this.value;
+        }
     }
 }
