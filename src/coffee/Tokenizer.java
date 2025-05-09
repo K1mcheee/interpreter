@@ -6,7 +6,7 @@ import java.util.List;
 
 
 public class Tokenizer {
-    
+
     boolean isNum(char c) {
         return c >= '0' && c <= '9';
     }
@@ -17,6 +17,10 @@ public class Tokenizer {
 
     boolean isArOp(char c) {
         return "+-*/".indexOf(c) >= 0;
+    }
+
+    boolean isSymbol(char c) {
+        return isArOp(c);
     }
 
     // Scanning
@@ -72,11 +76,11 @@ public class Tokenizer {
     }
 
     Pair<String, String> symbols(String prog, int sidx, int eidx) {
-        String token = prog.substring(sidx, eidx);
+        String token = prog.substring(sidx, eidx).trim();
         return symbol(token, sidx, eidx);
     }
 
-    List<Pair<String, String>> tokenizer(String prog) {
+    public List<Pair<String, String>> tokenize(String prog) {
         List<Pair<String, String>> res = new ArrayList<>();
         int idx = skip(prog, 0);
         int len = prog.length();
@@ -87,6 +91,10 @@ public class Tokenizer {
                 int sidx = idx;
                 idx = number(prog, idx);
                 res.add(numbers(prog, sidx, idx));
+            } else if (isSymbol(c)) {
+                int sidx = idx;
+                idx = symbol(prog, sidx);
+                res.add(symbols(prog, sidx, idx));
             }
             idx = skip(prog, idx);
         }
