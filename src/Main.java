@@ -16,15 +16,18 @@ import coffee.Writer;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        /*
-        String expr = "1 + 2";
+
+        String expr = "1 + 2 * 3 + 4";
         System.out.println(expr);
         Tokenizer tokenizer = new Tokenizer();
         List<Pair<String, String>> tokens = tokenizer.tokenize(expr);
         System.out.println(tokens);
         Parser parser = new Parser(tokens);
-        System.out.println(parser.parseExpr());
-        */
+        Expr prog = parser.parseExpr();
+        System.out.println(prog);
+        System.out.println(Writer.write(prog));
+
+        /*
          Env global = new Env(null);
          Expr expr = new ADD(new MUL(new VAL(3), new VAL(5)), new VAR("x"));
          Expr expr2 = new VAR("x");
@@ -36,6 +39,6 @@ public class Main {
         System.out.println(Eval.eval(expr, global));
         System.out.println(Eval.eval(expr2, global));
         System.out.println(Eval.eval(bexpr, global));
-
+        */
     }
 }

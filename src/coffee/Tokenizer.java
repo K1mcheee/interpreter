@@ -12,7 +12,7 @@ public class Tokenizer {
     }
 
     boolean isUpper(char c) {
-        return c >= 'A' && c <= 'A';
+        return c >= 'A' && c <= 'Z';
     }
 
     boolean isNum(char c) {
@@ -31,12 +31,20 @@ public class Tokenizer {
         return isLower(c) || isUpper(c) || isNum(c);
     }
 
+    boolean isBool(char c) {
+        return "&|".indexOf(c) >= 0;
+    }
+
     boolean isArOp(char c) {
         return "+-*/".indexOf(c) >= 0;
     }
 
+    boolean isReOp(char c) {
+        return "<=>!".indexOf(c) >= 0;
+    }
+
     boolean isSymbol(char c) {
-        return isArOp(c);
+        return isArOp(c) || isReOp(c) || isBool(c);
     }
 
     // Scanning
@@ -77,12 +85,21 @@ public class Tokenizer {
 
         if (isArOp(c) || idx + 1 == len) {
             idx++;
+        } else {
+            char next = prog.charAt(idx + 1);
+            if ((c == '<' || c == '>' || c == '=') && (next == '=')) {
+                idx += 2;
+            } else if ((c == '&') && (next == '&')) {
+                idx += 2;
+            } else if ((c == '|') && (next == '|')) {
+                idx += 2;
+            } else if ((c == '!') && (next == '=')) {
+                idx += 2;
+            } else {
+                idx++;
+            }
         }
-
-        idx++;
-
         return idx;
-
     }
 
     Pair<String, String> names(String prog,int sidx, int eidx) {
@@ -97,11 +114,20 @@ public class Tokenizer {
 
     Pair<String, String> symbol(String token, int sidx, int eidx) {
         return switch(token) {
-            case "+" -> new Pair<>("ADD", token);
-            case "-" -> new Pair<>("SUB", token);
-            case "*" -> new Pair<>("MUL", token);
-            case "/" -> new Pair<>("DIV", token);
-            default  -> throw new IllegalArgumentException("Unidentified token: " + token + " at ("
+            case "+"  -> new Pair<>("ADD", token);
+            case "-"  -> new Pair<>("SUB", token);
+            case "*"  -> new Pair<>("MUL", token);
+            case "/"  -> new Pair<>("DIV", token);
+            case "==" -> new Pair<>("EQS",token);
+            case ">"  -> new Pair<>("GEQ", token);
+            case ">=" -> new Pair<>("GTE" ,token);
+            case "<"  -> new Pair<>("LEQ", token);
+            case "<=" -> new Pair<>("LTE", token);
+            case "!=" -> new Pair<>("NEQ", token);
+            case "&&" -> new Pair<>("AND", token);
+            case "!"  -> new Pair<>("NOT", token);
+            case "||" -> new Pair<>("OR", token);
+            default   -> throw new IllegalArgumentException("Unidentified token: " + token + " at ("
             + sidx + ", " + eidx + ")");
         };
     }
