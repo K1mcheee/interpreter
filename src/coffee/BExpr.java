@@ -18,6 +18,13 @@ public class BExpr {
             this.lhs = lhs;
             this.rhs = rhs;
         }
+
+        BExpr lhs() {
+            return this.lhs;
+        }
+        BExpr rhs() {
+            return this.rhs;
+        }
     }
 
     public static class OR extends BExpr {
@@ -27,6 +34,13 @@ public class BExpr {
         public OR(BExpr lhs, BExpr rhs) {
             this.lhs = lhs;
             this.rhs = rhs;
+        }
+
+        BExpr lhs() {
+            return this.lhs;
+        }
+        BExpr rhs() {
+            return this.rhs;
         }
     }
 
