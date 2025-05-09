@@ -85,4 +85,17 @@ public abstract class Expr {
             return "" + this.value;
         }
     }
+
+    public static class VAR extends Expr {
+        String name;
+
+        public VAR(String name) {
+            this.name = name;
+        }
+
+        public String name() {
+            return this.name;
+        }
+    }
+
 }
