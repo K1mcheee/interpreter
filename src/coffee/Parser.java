@@ -67,9 +67,12 @@ public class Parser {
     }
 
     public Expr parseAtom() throws Exception {
-        if(check("INT", 0)) {
+        if (check("INT", 0)) {
             String atom = read("INT");
             return new VAL(Integer.parseInt(atom));
+        } else if (check("NAME", 0)) {
+            String atom = read("NAME");
+            return new VAR(atom);
         } else {
             throw new IllegalArgumentException("Unidentified variable");
         }

@@ -7,12 +7,28 @@ import java.util.List;
 
 public class Tokenizer {
 
+    boolean isLower(char c) {
+        return c >= 'a' && c <= 'z';
+    }
+
+    boolean isUpper(char c) {
+        return c >= 'A' && c <= 'A';
+    }
+
     boolean isNum(char c) {
         return c >= '0' && c <= '9';
     }
 
     boolean isSpace(char c) {
         return c == ' ' || c == '\n';
+    }
+
+    boolean isName(char c) {
+        return isLower(c) || isUpper(c);
+    }
+
+    boolean isNames(char c) {
+        return isLower(c) || isUpper(c) || isNum(c);
     }
 
     boolean isArOp(char c) {
@@ -29,6 +45,16 @@ public class Tokenizer {
         int len = prog.length();
 
         while (idx < len && isSpace(prog.charAt(idx))) {
+            idx++;
+        }
+        return idx;
+    }
+
+    int name(String prog, int sidx) {
+        int idx = sidx;
+        int len = prog.length();
+
+        while (idx < len && isNames(prog.charAt(idx))) {
             idx++;
         }
         return idx;
@@ -59,6 +85,11 @@ public class Tokenizer {
 
     }
 
+    Pair<String, String> names(String prog,int sidx, int eidx) {
+        String token = prog.substring(sidx, eidx);
+        return new Pair<>("NAME", token);
+    }
+
     Pair<String, String> numbers(String prog,int sidx, int eidx) {
         String token = prog.substring(sidx, eidx);
         return new Pair<>("INT", token);
@@ -87,9 +118,13 @@ public class Tokenizer {
 
         while (idx < len) {
             char c = prog.charAt(idx);
-            if (isNum(c)) {
+            if (isName(c)) {
                 int sidx = idx;
-                idx = number(prog, idx);
+                idx = name(prog, sidx);
+                res.add(names(prog, sidx, idx));
+            } else if (isNum(c)) {
+                int sidx = idx;
+                idx = number(prog, sidx);
                 res.add(numbers(prog, sidx, idx));
             } else if (isSymbol(c)) {
                 int sidx = idx;
