@@ -70,27 +70,16 @@ public class Parser {
         if (check("INT", 0)) {
             String atom = read("INT");
             return new VAL(Integer.parseInt(atom));
-        } else if (check("NAME", 0)) {
+        } else {
             String atom = read("NAME");
             return new VAR(atom);
-        } else {
-            throw new IllegalArgumentException("Unidentified variable");
         }
     }
 
-    public Expr parseExpr() throws Exception {
+    public Expr parseTerm() throws Exception {
         Expr latom = parseAtom();
-        while (check("ADD", 0) || check("SUB", 0) ||
-                check("MUL", 0) || check("DIV", 0)) {
-            if (check("ADD", 0)) {
-                read("ADD");
-                Expr rexpr = parseAtom();
-                latom = new ADD(latom, rexpr);
-            } else if (check("SUB", 0)) {
-                read("SUB");
-                Expr rexpr = parseAtom();
-                latom = new SUB(latom, rexpr);
-            } else if (check("MUL", 0)) {
+        while (check("MUL", 0) || check("DIV", 0)) {
+            if (check("MUL", 0)) {
                 read("MUL");
                 Expr rexpr = parseAtom();
                 latom = new MUL(latom,rexpr);
@@ -101,6 +90,22 @@ public class Parser {
             }
         }
         return latom;
+    }
+
+    public Expr parseExpr() throws Exception {
+        Expr lterm = parseTerm();
+        while (check("ADD", 0) || check("SUB", 0)) {
+            if (check("ADD", 0)) {
+                read("ADD");
+                Expr rexpr = parseTerm();
+                lterm = new ADD(lterm, rexpr);
+            } else if (check("SUB", 0)) {
+                read("SUB");
+                Expr rexpr = parseTerm();
+                lterm = new SUB(lterm, rexpr);
+            }
+        }
+        return lterm;
 
     }
 
