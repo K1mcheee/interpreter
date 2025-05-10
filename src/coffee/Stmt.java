@@ -49,6 +49,18 @@ public abstract class Stmt {
             this.thenStmt = thenStmt;
             this.elseStmt = elseStmt;
         }
+
+        public BExpr cond() {
+            return this.cond;
+        }
+
+        public Stmt thenStmt() {
+            return this.thenStmt;
+        }
+
+        public Stmt elseStmt() {
+            return this.elseStmt;
+        }
     }
 
     public static class WHILE extends Stmt {
@@ -59,6 +71,14 @@ public abstract class Stmt {
             this.cond = cond;
             this.loop = loop;
         }
+
+        public BExpr cond() {
+            return this.cond;
+        }
+
+        public Stmt loop() {
+            return this.loop;
+        }
     }
 
     public static class BLOCK extends Stmt {
@@ -66,6 +86,10 @@ public abstract class Stmt {
 
         public BLOCK(List<Stmt> stmts) {
             this.stmts = stmts;
+        }
+
+        public List<Stmt> stmts() {
+            return this.stmts;
         }
     }
 
@@ -79,6 +103,16 @@ public abstract class Stmt {
             this.pars = pars;
             this.body = body;
         }
+
+        public String name() {
+            return this.name;
+        }
+        public List<VAR> pars() {
+            return this.pars;
+        }
+        public Stmt body() {
+            return this.body;
+        }
     }
 
     public static class RET extends Stmt {
@@ -86,6 +120,10 @@ public abstract class Stmt {
 
         public RET(Expr expr) {
             this.expr = expr;
+        }
+
+        public Expr expr() {
+            return this.expr;
         }
     }
 }
