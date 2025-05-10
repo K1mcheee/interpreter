@@ -9,6 +9,8 @@ import coffee.Expr;
 import coffee.Expr.*;
 import coffee.RExpr;
 import coffee.RExpr.*;
+import coffee.Stmt;
+import coffee.Stmt.*;
 import coffee.Pair;
 import coffee.Parser;
 import coffee.Tokenizer;
@@ -17,8 +19,8 @@ import coffee.Writer;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-
-        String expr = "1 + x == 3 / 1";
+        /*
+        String expr = "x < 0 || x == 0";
         System.out.println(expr);
         Tokenizer tokenizer = new Tokenizer();
         List<Pair<String, String>> tokens = tokenizer.tokenize(expr);
@@ -27,19 +29,33 @@ public class Main {
         RExpr prog = parser.parseRExpr();
         System.out.println(prog);
         System.out.println(Writer.write(prog));
-
-        /*
-         Env global = new Env(null);
-         Expr expr = new ADD(new MUL(new VAL(3), new VAL(5)), new VAR("x"));
-         Expr expr2 = new VAR("x");
-        BExpr bexpr = new GTE(expr, expr2);
-        global.decl(new VAR("x"));
-        global.assg(new VAR("x"), new VAL(2));
-
-        System.out.println(Writer.write(bexpr));
-        System.out.println(Eval.eval(expr, global));
-        System.out.println(Eval.eval(expr2, global));
-        System.out.println(Eval.eval(bexpr, global));
         */
+
+         Env global = new Env(null);
+         Env env = new Env(global);
+         Stmt func = new BLOCK(List.of(
+                 new DECL(new VAR("res"), new VAL(1))                         ,
+                 new WHILE( new GEQ(new VAR("n"), new VAL(0)), new BLOCK(List.of(
+                         new ASSG(new VAR("res"), new MUL(new VAR("res"), new VAR("n")))    ,
+                         new ASSG(new VAR("n")  , new SUB(new VAR("n")  , new VAL(1)))
+                 )))                                              ,
+                 new RET(new VAR("res"))
+         ));
+         Stmt prog = new BLOCK(List.of(
+                 new FUNC("fac", List.of(new VAR("n")), func)
+         ));
+
+
+        System.out.println("-- Environment: Before");
+        System.out.println(env);
+        System.out.println(global.funcStr());
+        System.out.println("-------------------------");
+        System.out.println(Writer.write(prog, ""));
+        System.out.println(Eval.eval(prog, env, global));
+        System.out.println("-------------------------");
+        System.out.println("-- Environment: After");
+        System.out.println(env);
+        System.out.println(global.funcStr());
+
     }
 }
