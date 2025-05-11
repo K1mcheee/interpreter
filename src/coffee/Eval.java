@@ -1,5 +1,7 @@
 package coffee;
 
+import java.util.List;
+
 import coffee.BExpr.*;
 import coffee.Expr.*;
 import coffee.RExpr.*;
@@ -14,6 +16,25 @@ public final class Eval {
             case DIV d    -> new VAL(eval(d.lhs(), env, global).value() / eval(d.rhs(), env, global).value());
             case VAL val  -> new VAL(val.value());
             case VAR name -> env.getv(new VAR(name.name()));
+            case CALL c   -> {
+                // retrieve param and body
+                List<VAR> pars = global.pars(c.name());
+                Stmt body = global.body(c.name());
+
+                // create new env for fn, assign each arg to param
+                Env fnEnv = new Env(global);
+                int pLen = pars.size();
+                int pIdx = 0;
+
+                while (pIdx < pLen) {
+                    fnEnv.decl(pars.get(pIdx), eval(c.args().get(pIdx), env, global));
+                    pIdx++;
+                }
+                // eval body with new env
+                eval(body, fnEnv, global);
+                VAL res = fnEnv.ret();
+                yield new VAL(res.value());
+            }
             default       -> throw new IllegalArgumentException("Unidentified variable");
         };
     }
@@ -52,7 +73,7 @@ public final class Eval {
                 yield env;
             }
             case DECL d -> {
-                env.decl(d.lhs());
+                env.decl(d.lhs(), eval(d.rhs(), env, global));
                 env.assg(d.lhs(), eval(d.rhs(), env, global));
                 yield env;
             }
@@ -82,6 +103,14 @@ public final class Eval {
             }
             case RET r -> {
                 env.setRet(eval(r.expr(), env, global));
+                yield env;
+            }
+            case PRINT p -> {
+                System.out.println(p.name());
+                yield env;
+            }
+            case SHOW s -> {
+                eval(s.expr(), env, global).value();
                 yield env;
             }
             default -> throw new IllegalArgumentException("unidentified variable");

@@ -127,4 +127,28 @@ public abstract class Stmt {
             return this.expr;
         }
     }
+
+    public static class PRINT extends Stmt {
+        private String name;
+
+        public PRINT(String name) {
+            this.name = name;
+        }
+
+        public String name() {
+            return this.name;
+        }
+    }
+
+    public static class SHOW extends Stmt {
+        private Expr expr;
+
+        public SHOW(Expr expr) {
+            this.expr = expr;
+        }
+
+        public Expr expr() {
+            return this.expr;
+        }
+    }
 }

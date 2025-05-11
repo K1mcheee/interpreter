@@ -24,7 +24,7 @@ public class Env {
         }
     }
 
-    public void decl(VAR name) {
+    public void decl(VAR name, VAL value) {
         this.vars.put(name.name(), new VAL(0));
     }
 
@@ -35,12 +35,12 @@ public class Env {
         return this.global.getv(name);
     }
 
-    public boolean insv(VAR name) {
-        return this.vars.containsKey(name.name());
-    }
-
     public boolean hasv(VAR name) {
         return this.insv(name) || this.global.hasv(name);
+    }
+
+    public boolean insv(VAR name) {
+        return this.vars.containsKey(name.name());
     }
 
     public void func(String name, List<VAR> pars, Stmt body) {
@@ -70,6 +70,6 @@ public class Env {
 
     @Override
     public String toString() {
-        return this.vars.toString();
+        return this.vars.toString() + (this.global != null ? " ==> " + this.global : "");
     }
 }
