@@ -154,6 +154,7 @@ public class Tokenizer {
             case ")"  -> new Pair<>("CPAR", token);
             case ";"  -> new Pair<>("END", token);
             case ","  -> new Pair<>("SEP", token);
+            case "="  -> new Pair<>("ASSG", token);
             default   -> throw new IllegalArgumentException("Unidentified token: " + token + " at ("
                     + sidx + ", " + eidx + ")");
         };

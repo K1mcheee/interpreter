@@ -83,6 +83,12 @@ public class Parser {
             return expr;
         } else if (check("NAME", 0)) {
             String atom = read("NAME");
+            if (check("OPAR", 0)) {
+                read("OPAR");
+                List<Expr> args = parseArg();
+                read("CPAR");
+                return new CALL(atom, args);
+            }
             return new VAR(atom);
         } else {
             err("INT/OPAR/NAME");

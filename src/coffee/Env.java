@@ -25,7 +25,7 @@ public class Env {
     }
 
     public void decl(VAR name, VAL value) {
-        this.vars.put(name.name(), new VAL(0));
+        this.vars.put(name.name(), value);
     }
 
     public VAL getv(VAR name) {

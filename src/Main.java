@@ -19,18 +19,41 @@ import coffee.Writer;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        /*
-        String expr = "x < 0 || x == 0";
-        System.out.println(expr);
+        Env global = new Env(null);
+        String prog = """
+                        def fac(n) {
+                          int x = 0;
+                          if (n < 0 || n == 0) {
+                            return 1;
+                          } else {
+                            if (n == 0) {
+                              return 1;
+                            } else {
+                              return n * fac(n - 1);
+                            }
+                          }
+                        }
+                        def order1(a,b,c,d) {
+                          return a + b * c + d;
+                        }
+                        def order2(a,b,c,d) {
+                          return a - b - c - d;
+                        }
+                        def order3(a,b,c,d) {
+                          return a * b - c * d;
+                        }
+                        int m = order1(1, 2, 3, 4);
+                        """;
         Tokenizer tokenizer = new Tokenizer();
-        List<Pair<String, String>> tokens = tokenizer.tokenize(expr);
+        List<Pair<String, String>> tokens = tokenizer.tokenize(prog);
         System.out.println(tokens);
         Parser parser = new Parser(tokens);
-        RExpr prog = parser.parseRExpr();
-        System.out.println(prog);
-        System.out.println(Writer.write(prog));
-        */
-
+        Stmt ast = parser.parseStmt();
+        System.out.println(Writer.write(ast, ""));
+        System.out.println(">" + global);
+        Eval.eval(ast,global, global);
+        System.out.println("<" + global);
+        /*
          Env global = new Env(null);
          Env env = new Env(global);
          Stmt func = new BLOCK(List.of(
@@ -56,6 +79,6 @@ public class Main {
         System.out.println("-- Environment: After");
         System.out.println(env);
         System.out.println(global.funcStr());
-
+        */
     }
 }
