@@ -43,8 +43,20 @@ public class Tokenizer {
         return "<=>!".indexOf(c) >= 0;
     }
 
+    boolean isComma(char c) {
+        return c == ',';
+    }
+
+    boolean isParen(char c) {
+        return "(){}".indexOf(c) >= 0;
+    }
+
+    boolean isSemi(char c) {
+        return c == ';';
+    }
+
     boolean isSymbol(char c) {
-        return isArOp(c) || isReOp(c) || isBool(c);
+        return isBool(c) || isArOp(c) || isReOp(c) || isComma(c) || isParen(c) || isSemi(c);
     }
 
     // Scanning
@@ -104,7 +116,15 @@ public class Tokenizer {
 
     Pair<String, String> names(String prog,int sidx, int eidx) {
         String token = prog.substring(sidx, eidx);
-        return new Pair<>("NAME", token);
+        return switch(token) {
+            case "while" -> new Pair<>("WHILE", token);
+            case "if"    -> new Pair<>("IF", token);
+            case "else"  -> new Pair<>("ELSE", token);
+            case "return" -> new Pair<>("RET", token);
+            case "def"    -> new Pair<>("FUNC", token);
+            case "int"    -> new Pair<>("DECL", token);
+            default       -> new Pair<>("NAME", token);
+        };
     }
 
     Pair<String, String> numbers(String prog,int sidx, int eidx) {
@@ -112,7 +132,8 @@ public class Tokenizer {
         return new Pair<>("INT", token);
     }
 
-    Pair<String, String> symbol(String token, int sidx, int eidx) {
+    Pair<String, String> symbols(String prog, int sidx, int eidx) {
+        String token = prog.substring(sidx, eidx).trim();
         return switch(token) {
             case "+"  -> new Pair<>("ADD", token);
             case "-"  -> new Pair<>("SUB", token);
@@ -127,14 +148,16 @@ public class Tokenizer {
             case "&&" -> new Pair<>("AND", token);
             case "!"  -> new Pair<>("NOT", token);
             case "||" -> new Pair<>("OR", token);
+            case "{"  -> new Pair<>("OCUR", token);
+            case "}"  -> new Pair<>("CCUR", token);
+            case "("  -> new Pair<>("OPAR", token);
+            case ")"  -> new Pair<>("CPAR", token);
+            case ";"  -> new Pair<>("END", token);
+            case ","  -> new Pair<>("SEP", token);
+            case "="  -> new Pair<>("ASSG", token);
             default   -> throw new IllegalArgumentException("Unidentified token: " + token + " at ("
-            + sidx + ", " + eidx + ")");
+                    + sidx + ", " + eidx + ")");
         };
-    }
-
-    Pair<String, String> symbols(String prog, int sidx, int eidx) {
-        String token = prog.substring(sidx, eidx).trim();
-        return symbol(token, sidx, eidx);
     }
 
     public List<Pair<String, String>> tokenize(String prog) {

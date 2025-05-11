@@ -1,6 +1,6 @@
 package coffee;
 
-public class BExpr {
+public abstract class BExpr {
     public static class NOT extends BExpr {
         private BExpr arg;
 

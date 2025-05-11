@@ -1,6 +1,6 @@
 package coffee;
 
-public class RExpr extends BExpr{
+public abstract class RExpr extends BExpr{
     public static class EQS extends RExpr {
         private Expr lhs;
         private Expr rhs;

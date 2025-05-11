@@ -1,5 +1,7 @@
 package coffee;
 
+import java.util.List;
+
 public abstract class Expr {
     public static class ADD extends Expr {
         private final Expr lhs;
@@ -87,7 +89,7 @@ public abstract class Expr {
     }
 
     public static class VAR extends Expr {
-        String name;
+        private String name;
 
         public VAR(String name) {
             this.name = name;
@@ -95,6 +97,23 @@ public abstract class Expr {
 
         public String name() {
             return this.name;
+        }
+    }
+
+    public static class CALL extends Expr {
+        private String name;
+        private List<Expr> args;
+
+        public CALL(String name, List<Expr> args) {
+            this.name = name;
+            this.args = args;
+        }
+
+        public String name() {
+            return this.name;
+        }
+        public List<Expr> args() {
+            return this.args;
         }
     }
 
