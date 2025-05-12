@@ -8,13 +8,14 @@ import coffee.RExpr.*;
 import coffee.Stmt.*;
 
 public final class Eval {
-    public static VAL eval(Expr expr, Env env, Env global) {
+    public static LIT eval(Expr expr, Env env, Env global) {
         return switch (expr) {
             case ADD a    -> new VAL(eval(a.lhs(), env, global).value() + eval(a.rhs(), env, global).value());
             case SUB s    -> new VAL(eval(s.lhs(), env, global).value() - eval(s.rhs(), env, global).value());
             case MUL m    -> new VAL(eval(m.lhs(), env, global).value() * eval(m.rhs(), env, global).value());
             case DIV d    -> new VAL(eval(d.lhs(), env, global).value() / eval(d.rhs(), env, global).value());
             case VAL val  -> new VAL(val.value());
+            case STR str  -> new STR(str.string());
             case VAR name -> env.getv(new VAR(name.name()));
             case CALL c   -> {
                 // retrieve param and body
@@ -32,7 +33,7 @@ public final class Eval {
                 }
                 // eval body with new env
                 eval(body, fnEnv, global);
-                VAL res = fnEnv.ret();
+                LIT res = fnEnv.ret();
                 yield new VAL(res.value());
             }
             default       -> throw new IllegalArgumentException("Unidentified variable");

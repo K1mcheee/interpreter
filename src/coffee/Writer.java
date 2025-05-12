@@ -14,6 +14,7 @@ public class Writer {
             case SUB s    -> "(" + write(s.lhs()) + " - " + write(s.rhs()) + ")";
             case MUL m    -> "(" + write(m.lhs()) + " * " + write(m.rhs()) + ")";
             case DIV d    -> "(" + write(d.lhs()) + " / " + write(d.rhs()) + ")";
+            case STR s    -> "" + s.string();
             case VAL val  -> "" + val.value();
             case VAR name -> name.name();
             case CALL c   -> c.name() + "(" + c.args().stream().map((arg) -> write(arg))

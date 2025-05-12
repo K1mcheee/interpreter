@@ -1,6 +1,5 @@
 package coffee;
 
-import java.nio.channels.Pipe;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,8 +54,12 @@ public class Tokenizer {
         return c == ';';
     }
 
+    boolean isInv(char c) {
+        return c == '"';
+    }
+
     boolean isSymbol(char c) {
-        return isBool(c) || isArOp(c) || isReOp(c) || isComma(c) || isParen(c) || isSemi(c);
+        return isBool(c) || isArOp(c) || isReOp(c) || isComma(c) || isParen(c) || isSemi(c) || isInv(c);
     }
 
     // Scanning
@@ -155,6 +158,7 @@ public class Tokenizer {
             case ";"  -> new Pair<>("END", token);
             case ","  -> new Pair<>("SEP", token);
             case "="  -> new Pair<>("ASSG", token);
+            case "\"" -> new Pair<>("INV", token);
             default   -> throw new IllegalArgumentException("Unidentified token: " + token + " at ("
                     + sidx + ", " + eidx + ")");
         };

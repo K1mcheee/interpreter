@@ -7,16 +7,16 @@ import java.util.List;
 
 public class Env {
     private Env global;
-    private HashMap<String, VAL> vars = new HashMap<>();
+    private HashMap<String, LIT> vars = new HashMap<>();
     private HashMap<String, List<VAR>> pars = new HashMap<>();
     private HashMap<String, Stmt> body = new HashMap<>();
-    private VAL ret = null;
+    private LIT ret = null;
 
     public Env(Env global) {
         this.global = global;
     }
 
-    public void assg(VAR name, VAL value) {
+    public void assg(VAR name, LIT value) {
         if (this.insv(name)) {
             this.vars.put(name.name(), value);
         } else {
@@ -24,11 +24,12 @@ public class Env {
         }
     }
 
-    public void decl(VAR name, VAL value) {
+
+    public void decl(VAR name, LIT value) {
         this.vars.put(name.name(), value);
     }
 
-    public VAL getv(VAR name) {
+    public LIT getv(VAR name) {
         if (this.insv(name)) {
             return this.vars.get(name.name());
         }
@@ -56,11 +57,11 @@ public class Env {
         return this.body.get(name);
     }
 
-    public VAL ret() {
+    public LIT ret() {
         return this.ret;
     }
 
-    public void setRet(VAL value) {
+    public void setRet(LIT value) {
         this.ret = value;
     }
 

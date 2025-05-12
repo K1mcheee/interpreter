@@ -76,6 +76,11 @@ public class Parser {
         if (check("INT", 0)) {
             String atom = read("INT");
             return new VAL(Integer.parseInt(atom));
+        } else if (check("INV", 0)) {
+            read("INV");
+            String str = read("NAME");
+            read("INV");
+            return new STR(str);
         } else if (check("OPAR", 0)) {
             read("OPAR");
             Expr expr = parseExpr();
