@@ -52,7 +52,7 @@ public class Writer {
 
     public static String write(Stmt stmt, String tabs) {
         return switch(stmt) {
-            case DECL d  -> tabs + "int "  + write(d.lhs()) + " = " + write(d.rhs()) + ";\n";
+            case DECL d  -> tabs + "var "  + write(d.lhs()) + " = " + write(d.rhs()) + ";\n";
             case ASSG a  -> tabs           + write(a.lhs()) + " = " + write(a.rhs()) + ";\n";
             case IF   i  -> tabs + "if"    + write(i.cond()) + " {\n"     +
                                 write(i.thenStmt(), tabs + "  ") +

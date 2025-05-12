@@ -73,12 +73,16 @@ public class Tokenizer {
         return idx;
     }
 
-    int str(String prog, int sidx) {
+    int str(String prog, int sidx) throws Exception {
         int idx = sidx + 1;
         int len = prog.length();
 
         while (idx < len && !isInv(prog.charAt(idx))) {
             idx++;
+        }
+
+        if (idx >= len) {
+            throw new Exception("Expect \" for string declaration");
         }
 
         return ++idx;
@@ -141,7 +145,7 @@ public class Tokenizer {
             case "else"  -> new Pair<>("ELSE", token);
             case "return" -> new Pair<>("RET", token);
             case "def"    -> new Pair<>("FUNC", token);
-            case "int"    -> new Pair<>("DECL", token);
+            case "var"    -> new Pair<>("DECL", token);
             default       -> new Pair<>("NAME", token);
         };
     }
@@ -179,7 +183,7 @@ public class Tokenizer {
         };
     }
 
-    public List<Pair<String, String>> tokenize(String prog) {
+    public List<Pair<String, String>> tokenize(String prog) throws Exception {
         List<Pair<String, String>> res = new ArrayList<>();
         int idx = skip(prog, 0);
         int len = prog.length();
