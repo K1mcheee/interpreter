@@ -33,6 +33,14 @@ public class Main {
                             }
                           }
                         }
+                        def fib(n) {
+                            if (n <= 1) {
+                                return n;
+                           } else {
+                                return fib(n - 2) + fib(n - 1);
+                               }
+                        }
+                        
                         def order1(a,b,c,d) {
                           return a + b * c + d;
                         }
@@ -42,7 +50,8 @@ public class Main {
                         def order3(a,b,c,d) {
                           return a * b - c * d;
                         }
-                        int m = order1(1, 2, 3, 4);
+                        int m = "fib(7)";
+                        int b = "the quick brown fox";
                         """;
         Tokenizer tokenizer = new Tokenizer();
         List<Pair<String, String>> tokens = tokenizer.tokenize(prog);

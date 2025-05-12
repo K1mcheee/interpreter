@@ -59,7 +59,7 @@ public class Tokenizer {
     }
 
     boolean isSymbol(char c) {
-        return isBool(c) || isArOp(c) || isReOp(c) || isComma(c) || isParen(c) || isSemi(c) || isInv(c);
+        return isBool(c) || isArOp(c) || isReOp(c) || isComma(c) || isParen(c) || isSemi(c);
     }
 
     // Scanning
@@ -71,6 +71,17 @@ public class Tokenizer {
             idx++;
         }
         return idx;
+    }
+
+    int str(String prog, int sidx) {
+        int idx = sidx + 1;
+        int len = prog.length();
+
+        while (idx < len && !isInv(prog.charAt(idx))) {
+            idx++;
+        }
+
+        return ++idx;
     }
 
     int name(String prog, int sidx) {
@@ -117,7 +128,12 @@ public class Tokenizer {
         return idx;
     }
 
-    Pair<String, String> names(String prog,int sidx, int eidx) {
+    Pair<String, String> strs(String prog, int sidx,int eidx) {
+        String token = prog.substring(sidx, eidx);
+        return new Pair<>("STR", token);
+    }
+
+    Pair<String, String> names(String prog, int sidx, int eidx) {
         String token = prog.substring(sidx, eidx);
         return switch(token) {
             case "while" -> new Pair<>("WHILE", token);
@@ -158,7 +174,6 @@ public class Tokenizer {
             case ";"  -> new Pair<>("END", token);
             case ","  -> new Pair<>("SEP", token);
             case "="  -> new Pair<>("ASSG", token);
-            case "\"" -> new Pair<>("INV", token);
             default   -> throw new IllegalArgumentException("Unidentified token: " + token + " at ("
                     + sidx + ", " + eidx + ")");
         };
@@ -179,6 +194,10 @@ public class Tokenizer {
                 int sidx = idx;
                 idx = number(prog, sidx);
                 res.add(numbers(prog, sidx, idx));
+            } else if (isInv(c)) {
+                int sidx = idx;
+                idx = str(prog, sidx);
+                res.add(strs(prog, sidx, idx));
             } else if (isSymbol(c)) {
                 int sidx = idx;
                 idx = symbol(prog, sidx);
