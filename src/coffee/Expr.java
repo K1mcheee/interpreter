@@ -71,13 +71,42 @@ public abstract class Expr {
         }
     }
 
-    public static class VAL extends Expr {
+    public static class LIT extends Expr{
+        public String string() {
+            return "";
+        }
+
+        public int value() {
+            return 0;
+        }
+    }
+
+    public static class STR extends LIT {
+        String string;
+
+        public STR(String string) {
+            this.string = string;
+        }
+
+        @Override
+        public String string() {
+            return this.string;
+        }
+
+        @Override
+        public String toString() {
+            return this.string;
+        }
+    }
+
+    public static class VAL extends LIT {
         int value;
 
         public VAL(int value) {
             this.value = value;
         }
 
+        @Override
         public int value() {
             return this.value;
         }

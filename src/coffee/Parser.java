@@ -76,6 +76,10 @@ public class Parser {
         if (check("INT", 0)) {
             String atom = read("INT");
             return new VAL(Integer.parseInt(atom));
+        } else if (check("STR", 0)) {
+            String str = read("STR");
+            System.out.println(str);
+            return new STR(str);
         } else if (check("OPAR", 0)) {
             read("OPAR");
             Expr expr = parseExpr();
@@ -189,10 +193,10 @@ public class Parser {
             return new BLOCK(List.of());
         }
         Stmt lstmt = null;
-        if (accept("DECL")) {
-            lstmt = parseDecl();
-        } else if (check("NAME", 0)) {
+        if (check("NAME", 0)) {
             lstmt = parseAssg();
+        } else if (accept("DECL")) {
+            lstmt = parseDecl();
         } else if (accept("IF")) {
             lstmt = parseIf();
         } else if (accept("WHILE")) {
@@ -300,10 +304,10 @@ public class Parser {
             return new BLOCK(List.of());
         }
         Stmt lstmt = null;
-        if (accept("DECL")) {
-            lstmt = parseDecl();
-        } else if (check("NAME", 0)) {
+        if (check("NAME", 0)) {
             lstmt = parseAssg();
+        } else if (accept("DECL")) {
+            lstmt = parseDecl();
         } else if (accept("IF")) {
             lstmt = parseIf();
         } else if (accept("WHILE")) {

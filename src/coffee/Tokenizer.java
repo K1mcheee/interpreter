@@ -1,6 +1,5 @@
 package coffee;
 
-import java.nio.channels.Pipe;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +54,10 @@ public class Tokenizer {
         return c == ';';
     }
 
+    boolean isInv(char c) {
+        return c == '"';
+    }
+
     boolean isSymbol(char c) {
         return isBool(c) || isArOp(c) || isReOp(c) || isComma(c) || isParen(c) || isSemi(c);
     }
@@ -68,6 +71,21 @@ public class Tokenizer {
             idx++;
         }
         return idx;
+    }
+
+    int str(String prog, int sidx) throws Exception {
+        int idx = sidx + 1;
+        int len = prog.length();
+
+        while (idx < len && !isInv(prog.charAt(idx))) {
+            idx++;
+        }
+
+        if (idx >= len) {
+            throw new Exception("Expect \" for string declaration");
+        }
+
+        return ++idx;
     }
 
     int name(String prog, int sidx) {
@@ -114,7 +132,12 @@ public class Tokenizer {
         return idx;
     }
 
-    Pair<String, String> names(String prog,int sidx, int eidx) {
+    Pair<String, String> strs(String prog, int sidx,int eidx) {
+        String token = prog.substring(sidx, eidx);
+        return new Pair<>("STR", token);
+    }
+
+    Pair<String, String> names(String prog, int sidx, int eidx) {
         String token = prog.substring(sidx, eidx);
         return switch(token) {
             case "while" -> new Pair<>("WHILE", token);
@@ -122,7 +145,7 @@ public class Tokenizer {
             case "else"  -> new Pair<>("ELSE", token);
             case "return" -> new Pair<>("RET", token);
             case "def"    -> new Pair<>("FUNC", token);
-            case "int"    -> new Pair<>("DECL", token);
+            case "var"    -> new Pair<>("DECL", token);
             default       -> new Pair<>("NAME", token);
         };
     }
@@ -160,7 +183,7 @@ public class Tokenizer {
         };
     }
 
-    public List<Pair<String, String>> tokenize(String prog) {
+    public List<Pair<String, String>> tokenize(String prog) throws Exception {
         List<Pair<String, String>> res = new ArrayList<>();
         int idx = skip(prog, 0);
         int len = prog.length();
@@ -175,6 +198,10 @@ public class Tokenizer {
                 int sidx = idx;
                 idx = number(prog, sidx);
                 res.add(numbers(prog, sidx, idx));
+            } else if (isInv(c)) {
+                int sidx = idx;
+                idx = str(prog, sidx);
+                res.add(strs(prog, sidx, idx));
             } else if (isSymbol(c)) {
                 int sidx = idx;
                 idx = symbol(prog, sidx);
