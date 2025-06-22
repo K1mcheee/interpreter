@@ -98,6 +98,10 @@ public final class Eval {
                 }
                 yield env;
             }
+            case CLASS c -> {
+                global.klass(c.name(), c.methods());
+                yield env;
+            }
             case FUNC f -> {
                 global.func(f.name(), f.pars(), f.body());
                 yield env;

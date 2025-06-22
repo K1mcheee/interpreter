@@ -1,6 +1,7 @@
 package coffee;
 
 import coffee.Expr.*;
+import coffee.Stmt.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ public class Env {
     private HashMap<String, LIT> vars = new HashMap<>();
     private HashMap<String, List<VAR>> pars = new HashMap<>();
     private HashMap<String, Stmt> body = new HashMap<>();
+    private HashMap<String, List<FUNC>> methods = new HashMap<>();
     private LIT ret = null;
 
     public Env(Env global) {
@@ -42,6 +44,10 @@ public class Env {
 
     public boolean insv(VAR name) {
         return this.vars.containsKey(name.name());
+    }
+
+    public void klass(String name, List<FUNC> funcs) {
+        this.methods.put(name, funcs);
     }
 
     public void func(String name, List<VAR> pars, Stmt body) {

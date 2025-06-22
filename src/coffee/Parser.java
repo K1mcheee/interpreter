@@ -201,6 +201,8 @@ public class Parser {
             lstmt = parseIf();
         } else if (accept("WHILE")) {
             lstmt = parseWhile();
+        } else if (accept("CLASS")) {
+            lstmt = parseClass();
         } else if (accept("FUNC")) {
             lstmt = parseFunc();
         } else if (accept("RET")) {
@@ -259,8 +261,23 @@ public class Parser {
         return new WHILE(cond, loop);
     }
 
+    public CLASS parseClass() throws Exception {
+        String name = read("NAME");
+        System.out.println(name);
+        read("OCUR");
+        List<FUNC> methods = new ArrayList<>();
+        while (!check("CCUR", 0)) {
+            read("FUNC");
+            FUNC fun = parseFunc();
+            methods.add(fun);
+        }
+        read("CCUR");
+        return new CLASS(name, methods);
+    }
+
     public FUNC parseFunc() throws Exception {
         String name = read("NAME");
+        System.out.println(name);
         read("OPAR");
         List<VAR> pars = parsePar();
         read("CPAR");
@@ -312,6 +329,8 @@ public class Parser {
             lstmt = parseIf();
         } else if (accept("WHILE")) {
             lstmt = parseWhile();
+        } else if (accept("CLASS")) {
+            lstmt = parseClass();
         } else if (accept("FUNC")) {
             lstmt = parseFunc();
         } else if (accept("RET")) {

@@ -94,6 +94,23 @@ public abstract class Stmt {
 
     }
 
+    public static class CLASS extends Stmt {
+        private String name;
+        private List<FUNC> methods;
+
+        public CLASS(String name, List<FUNC> methods) {
+            this.name = name;
+            this.methods = methods;
+        }
+
+        public String name() {
+            return this.name;
+        }
+        public List<FUNC> methods() {
+            return this.methods;
+        }
+    }
+
     public static class FUNC extends Stmt {
         private String name;
         private List<VAR> pars;

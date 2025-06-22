@@ -63,15 +63,15 @@ public class Tokenizer {
     }
 
     // Scanning
-    int skip(String prog, int sidx) {
-        int idx = sidx;
-        int len = prog.length();
+        int skip(String prog, int sidx) {
+            int idx = sidx;
+            int len = prog.length();
 
-        while (idx < len && isSpace(prog.charAt(idx))) {
-            idx++;
+            while (idx < len && isSpace(prog.charAt(idx))) {
+                idx++;
+            }
+            return idx;
         }
-        return idx;
-    }
 
     int str(String prog, int sidx) throws Exception {
         int idx = sidx + 1;
@@ -146,6 +146,7 @@ public class Tokenizer {
             case "return" -> new Pair<>("RET", token);
             case "def"    -> new Pair<>("FUNC", token);
             case "var"    -> new Pair<>("DECL", token);
+            case "class"  -> new Pair<>("CLASS", token);
             default       -> new Pair<>("NAME", token);
         };
     }

@@ -64,6 +64,10 @@ public class Writer {
                             tabs + "}\n";
             case BLOCK b -> b.stmts().stream().map(s -> write(s, tabs))
                             .reduce("", (x, y) -> x + y);
+            case CLASS c -> tabs + "class " + c.name() + " {\n"                   +
+                    c.methods().stream().map(fun -> write(fun, tabs + " "))
+                            .collect(Collectors.joining()) +
+                    tabs + "}\n";
             case FUNC f  -> tabs + "def " + f.name() + "("                            +
                             f.pars().stream().map(par -> write(par))
                              .collect(Collectors.joining(", ")) + ") {\n"    +
